@@ -39,7 +39,7 @@ M.ui = {
 
     -- default/round/block/arrow separators work only for default statusline theme
     -- round and block will work for minimal theme only
-    separator_style = "round",
+    separator_style = "block",
     overriden_modules = nil,
 
     -- vim.opt.statusline = " %f %m %= %1:%c ♥ "
