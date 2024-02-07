@@ -231,33 +231,30 @@ local plugins = {
 	},
 
 	{
-		"nvim-treesitter/nvim-treesitter-textobjects",
 		"nvim-treesitter/playground",
 		dependencies = { "nvim-treesitter/nvim-treesitter" },
 		init = function()
-			require("core.utils").lazy_load "nvim-treesitter-textobjects"
 			require("core.utils").lazy_load "playground"
 		end,
 		config = function ()
-			local textobj_opt = require("plugins.configs.treesitter").textobjects
 			local play_opt = require("plugins.configs.treesitter").playground
 			local query_opt = require("plugins.configs.treesitter").query_linter
-			local opts = vim.tbl_deep_extend("error", textobj_opt, play_opt,  query_opt)
+			local opts = vim.tbl_deep_extend("error", play_opt,  query_opt)
 			require("nvim-treesitter.configs").setup(opts)
 		end
 	},
 
-	-- {
-	-- 	"nvim-treesitter/nvim-treesitter-textobjects",
-	-- 	dependencies = { "nvim-treesitter/nvim-treesitter" },
-	-- 	init = function()
-	-- 		require("core.utils").lazy_load "nvim-treesitter-textobjects"
-	-- 	end,
-	-- 	config = function ()
-	-- 		local opts = require("plugins.configs.treesitter").textobjects
-	-- 		require("nvim-treesitter.configs").setup(opts)
-	-- 	end
-	-- },
+	{
+		"nvim-treesitter/nvim-treesitter-textobjects",
+		dependencies = { "nvim-treesitter/nvim-treesitter" },
+		init = function()
+			require("core.utils").lazy_load "nvim-treesitter-textobjects"
+		end,
+		config = function ()
+			local opts = require("plugins.configs.treesitter").textobjects
+			require("nvim-treesitter.configs").setup(opts)
+		end
+	},
 
 	-- [[ Thing that don't load ]]
 	{
