@@ -66,11 +66,11 @@ M.comment = {
   plugin = true,
 
   n = {
-    ["<leader>/"] = { function() require("Comment.api").toggle.linewise.current() end, "Toggle comment" },
+    -- ["<leader>/"] = { function() require("Comment.api").toggle.linewise.current() end, "Toggle comment" },
   },
 
   v = {
-    ["<leader>/"] = { "<ESC><cmd>lua require('Comment.api').toggle.linewise(vim.fn.visualmode())<CR>", "Toggle comment" },
+    -- ["<leader>/"] = { "<ESC><cmd>lua require('Comment.api').toggle.linewise(vim.fn.visualmode())<CR>", "Toggle comment" },
   },
 }
 
@@ -114,16 +114,32 @@ M.telescope = {
   -- (https://github.com/nvim-telescope/telescope.nvim/wiki/Showcase)
   n = {
     -- find
-    ["<leader>ff"] = { "<cmd> Telescope find_files <CR>", "Find files" },
-    ["<leader>fa"] = { "<cmd> Telescope find_files follow=true no_ignore=true hidden=true <CR>", "Find all" },
-    ["<leader>fg"] = { "<cmd> Telescope live_grep <CR>", "Live Grep" },
-    ["<leader>fs"] = { "<cmd> Telescope grep_string <CR>", "Grep String" },
+    ["<leader>ff"] = { function ()
+			require('telescope.builtin').find_files()
+    end, "[F]ind [f]iles" },
+    ["<leader>fa"] = { function ()
+			require('telescope.builtin').find_files {
+				follow = true, no_ignore = true, hidden = true
+			}
+    end, "[F]ind [A]ll" },
+    ["<leader>fg"] = { function () require('telescope.builtin').live_grep()
+    end, "[F]ind by [G]rep" },
+    ["<leader>fs"] = { function () require('telescope.builtin').grep_string()
+    end, "[F]ind [S]tring" },
+
     ["<leader>fc"] = { "<cmd> Telescope commands <CR>", "Find Commands" },
-    ["<leader>fb"] = { "<cmd> Telescope buffers <CR>", "Find buffers" },
-    ["<leader>fo"] = { "<cmd> Telescope oldfiles <CR>", "Find oldfiles" },
+    ["<leader>fb"] = { function () require('telescope.builtin').buffers()
+    end, "[F]ind [B]uffers" },
+    ["<leader>fo"] = { function () require('telescope.builtin').oldfiles()
+    end, "[F]ind [O]ldfiles" },
     ["<C-f>"] = { "<cmd> Telescope current_buffer_fuzzy_find <CR>", "Find in current buffer" },
-    ["<leader>fh"] = { "<cmd> Telescope help_tags <CR>", "Help page" },
-    ["<leader>fk"] = { "<cmd> Telescope keymaps <CR>", "Find Keymaps" },
+    ["<leader>/"] = { function ()
+			require('telescope.builtin').current_buffer_fuzzy_find(require('telescope.themes').get_dropdown { winblend = 10, previewer = false, })
+    end, "[/] Fuzzily search in current buffer" },
+    ["<leader>fh"] = { function () require('telescope.builtin').help_tags()
+    end, "[F]ind [H]elp page" },
+    ["<leader>fk"] = { function () require('telescope.builtin').keymaps()
+    end, "[F]ind [K]eymaps" },
 
     -- git
     ["<leader>cm"] = { "<cmd> Telescope git_commits <CR>", "Git commits" },
@@ -135,6 +151,21 @@ M.telescope = {
     -- theme switcher
     ["<leader>th"] = { "<cmd> Telescope themes <CR>", "Nvchad themes" },
     ["<leader>ma"] = { "<cmd> Telescope marks <CR>", "telescope bookmarks" },
+
+		-- something else
+    ["<leader>sn"] = { function ()
+			require('telescope.builtin').find_files { cwd = vim.fn.stdpath 'config' }
+		end, "[S]earch [N]eovim files" },
+    ["<leader>ss"] = { function () require('telescope.builtin').builtin()
+    end, "[S]earch [S]elect Telescope" },
+    ["<leader>sr"] = { function () require('telescope.builtin').resum()
+    end, "[S]earch [S]elect Telescope" },
+    ["<leader>sd"] = { function () require('telescope.builtin').diagnostics()
+    end, "[S]earch [D]iagnostics" },
+    ["<leader>s/"] = { function () require('telescope.builtin').live_grep {
+			grep_open_files = true,
+			prompt_title = 'Live Grep in Open Files',
+		} end, "[S]earch [/] in Open Files" },
   },
 }
 
@@ -144,8 +175,7 @@ M.whichkey = {
 
   n = {
     ["<leader>wK"] = { function() vim.cmd "WhichKey" end, "Which-key all keymaps" },
-    ["<leader>wk"] = {
-      function()
+    ["<leader>wk"] = { function()
         local input = vim.fn.input "WhichKey: " vim.cmd("WhichKey " .. input)
       end, "Which-key query lookup" },
   },

@@ -1,19 +1,10 @@
 local Server_config = {}
 
-Server_config.clangd = { }
+Server_config.clangd = {}
 
-Server_config.rust_analyzer = {
-  ['rust-analyzer'] = {
-    diagnostics = {
-      enable = true,
-    },
-    check = {
-      command = "clippy"
-    }
-  },
-}
+Server_config.rust_analyzer = {}
 
-Server_config.zls = { }
+Server_config.zls = {}
 
 Server_config.gopls = {
   completeUnimported = true,
@@ -44,13 +35,11 @@ Server_config.lua_ls ={
   },
 }
 
-Server_config.powershell_es = { }
-
-	-- "html",
-	-- "cssls",
-	-- "tsserver",
-	-- "tailwindcss",
-	-- "emmet_language_server",
-	-- "eslint",
+-- "html",
+-- "cssls",
+-- "tsserver",
+-- "tailwindcss",
+-- "emmet_language_server",
+-- "eslint",
 
 return Server_config

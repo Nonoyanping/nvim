@@ -4,7 +4,7 @@ local config = require("core.utils").load_config()
 
 ----------------------------------- globals --------------------------------------
 -- g.lang = 'en_US'
-vim.cmd[[let $LANG = 'en_US']]
+vim.cmd [[let $LANG = 'en_US']]
 g.nvchad_theme = config.ui.theme
 g.base46_cache = vim.fn.stdpath "data" .. "/nvchad/base46/"
 g.toggle_theme_icon = "   "
@@ -13,16 +13,16 @@ g.transparency = config.ui.transparency
 ----------------------------------- options --------------------------------------
 -- NOTE: Set your shell to powershell
 local powershell_options = {
-  shell = vim.fn.executable("pwsh") == 1 and "pwsh" or "powershell",
-  shellcmdflag = "-NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command [Console]::InputEncoding=[Console]::OutputEncoding=[System.Text.Encoding]::UTF8;",
-  shellredir = "-RedirectStandardOutput %s -NoNewWindow -Wait",
-  shellpipe = "2>&1 | Out-File -Encoding UTF8 %s; exit $LastExitCode",
-  shellquote = "",
-  shellxquote = "",
+    shell = vim.fn.executable "pwsh" == 1 and "pwsh" or "powershell",
+    shellcmdflag = "-NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command [Console]::InputEncoding=[Console]::OutputEncoding=[System.Text.Encoding]::UTF8;",
+    shellredir = "-RedirectStandardOutput %s -NoNewWindow -Wait",
+    shellpipe = "2>&1 | Out-File -Encoding UTF8 %s; exit $LastExitCode",
+    shellquote = "",
+    shellxquote = "",
 }
 
 for option, value in pairs(powershell_options) do
-  vim.opt[option] = value
+    vim.opt[option] = value
 end
 
 opt.laststatus = 3 -- global statusline
@@ -45,7 +45,7 @@ opt.smartcase = true
 opt.mouse = "a"
 
 -- Numbers
--- opt.number = true
+opt.number = true
 opt.relativenumber = true
 opt.numberwidth = 2
 opt.ruler = false
@@ -78,76 +78,76 @@ g.mapleader = " "
 -- for _, provider in ipairs { "node", "perl", "python3", "ruby" } do
 --   vim.g["loaded_" .. provider .. "_provider"] = 0
 -- end
-for _, provider in ipairs {"perl", "python3", "ruby" } do
-  vim.g["loaded_" .. provider .. "_provider"] = 0
+for _, provider in ipairs { "perl", "python3", "ruby" } do
+    vim.g["loaded_" .. provider .. "_provider"] = 0
 end
 
 -- add binaries installed by mason.nvim to path
 local is_windows = vim.loop.os_uname().sysname == "Windows_NT"
 vim.env.PATH = vim.fn.stdpath "data" .. "/mason/bin" .. (is_windows and ";" or ":") .. vim.env.PATH
 
--------------------------------------- autocmds ------------------------------------------
+-------------------------------------- autocmds -----------------------------------
 local autocmd = vim.api.nvim_create_autocmd
 
 -- dont list quickfix buffers
 autocmd("FileType", {
-  pattern = "qf",
-  callback = function()
-    vim.opt_local.buflisted = false
-  end,
+    pattern = "qf",
+    callback = function()
+        vim.opt_local.buflisted = false
+    end,
 })
 
 -- reload some chadrc options on-save
 autocmd("BufWritePost", {
-  pattern = vim.tbl_map(function(path)
-    return vim.fs.normalize(vim.loop.fs_realpath(path))
-  -- end, vim.fn.glob(vim.fn.stdpath "config" .. "/lua/custom/**/*.lua", true, true, true)),
-  end, vim.fn.glob(vim.fn.stdpath "config" .. "/lua/core/*.lua", true, true, true)),
+    pattern = vim.tbl_map(function(path)
+        return vim.fs.normalize(vim.loop.fs_realpath(path))
+        -- end, vim.fn.glob(vim.fn.stdpath "config" .. "/lua/custom/**/*.lua", true, true, true)),
+    end, vim.fn.glob(vim.fn.stdpath "config" .. "/lua/core/*.lua", true, true, true)),
 
-  group = vim.api.nvim_create_augroup("ReloadNvChad", {}),
+    group = vim.api.nvim_create_augroup("ReloadNvChad", {}),
 
-  callback = function(opts)
-    local fp = vim.fn.fnamemodify(vim.fs.normalize(vim.api.nvim_buf_get_name(opts.buf)), ":r") --[[@as string]]
+    callback = function(opts)
+        local fp = vim.fn.fnamemodify(vim.fs.normalize(vim.api.nvim_buf_get_name(opts.buf)), ":r") --[[@as string]]
 
-    -- ++++++++++++++++++++++++++++++++++++++++++++++++++
-    -- vim.notify("Variable fp:" .. fp)
-    -- ++++++++++++++++++++++++++++++++++++++++++++++++++
+        -- ++++++++++++++++++++++++++++++++++++++++++++++++++
+        -- vim.notify("Variable fp:" .. fp)
+        -- ++++++++++++++++++++++++++++++++++++++++++++++++++
 
-    local app_name = vim.env.NVIM_APPNAME and vim.env.NVIM_APPNAME or "nvim"
-    local module = string.gsub(fp, "^.*/" .. app_name .. "/lua/", ""):gsub("/", ".")
+        local app_name = vim.env.NVIM_APPNAME and vim.env.NVIM_APPNAME or "nvim"
+        local module = string.gsub(fp, "^.*/" .. app_name .. "/lua/", ""):gsub("/", ".")
 
-    -- ++++++++++++++++++++++++++++++++++++++++++++++++++
-    -- vim.notify("Variable module:" .. module)
-    -- ++++++++++++++++++++++++++++++++++++++++++++++++++
+        -- ++++++++++++++++++++++++++++++++++++++++++++++++++
+        -- vim.notify("Variable module:" .. module)
+        -- ++++++++++++++++++++++++++++++++++++++++++++++++++
 
-    require("plenary.reload").reload_module "base46"
-    require("plenary.reload").reload_module(module)
-    require("plenary.reload").reload_module "custom.chadrc"
-    require("plenary.reload").reload_module "custom.test"
+        require("plenary.reload").reload_module "base46"
+        require("plenary.reload").reload_module(module)
+        require("plenary.reload").reload_module "custom.chadrc"
+        require("plenary.reload").reload_module "custom.test"
 
-    config = require("core.utils").load_config()
+        config = require("core.utils").load_config()
 
-    vim.g.nvchad_theme = config.ui.theme
-    vim.g.transparency = config.ui.transparency
+        vim.g.nvchad_theme = config.ui.theme
+        vim.g.transparency = config.ui.transparency
 
-    -- statusline
-    require("plenary.reload").reload_module("nvchad.statusline." .. config.ui.statusline.theme)
-    vim.opt.statusline = "%!v:lua.require('nvchad.statusline." .. config.ui.statusline.theme .. "').run()"
+        -- statusline
+        require("plenary.reload").reload_module("nvchad.statusline." .. config.ui.statusline.theme)
+        vim.opt.statusline = "%!v:lua.require('nvchad.statusline." .. config.ui.statusline.theme .. "').run()"
 
-    -- tabufline
-    if config.ui.tabufline.enabled then
-      require("plenary.reload").reload_module "nvchad.tabufline.modules"
-      vim.opt.tabline = "%!v:lua.require('nvchad.tabufline.modules').run()"
-    end
+        -- tabufline
+        if config.ui.tabufline.enabled then
+            require("plenary.reload").reload_module "nvchad.tabufline.modules"
+            vim.opt.tabline = "%!v:lua.require('nvchad.tabufline.modules').run()"
+        end
 
-    require("base46").load_all_highlights()
-    -- vim.cmd("redraw!")
+        require("base46").load_all_highlights()
+        -- vim.cmd("redraw!")
 
-    vim.notify("base46 " .. " reload!")
-    vim.notify("module: " .. module .. " reload!")
-    vim.notify("custom.chadrc " .. " reload!")
-    require("plenary.reload").reload_module "custom.test"
-  end,
+        vim.notify("base46 " .. " reload!")
+        vim.notify("module: " .. module .. " reload!")
+        vim.notify("custom.chadrc " .. " reload!")
+        require("plenary.reload").reload_module "custom.test"
+    end,
 })
 
 ---------------------------------- commands --------------------------------------
@@ -155,7 +155,7 @@ local user_cmd = vim.api.nvim_create_user_command
 
 -- Update Neovim
 user_cmd("NvimUpdate", function()
-  require "nvchad.updater"()
+    require "nvchad.updater"()
 end, {})
 
 ------------------------- Further Configuration -------------------------
@@ -206,7 +206,6 @@ autocmd("CursorHold", {
 -- opt.shortmess = vim.opt.shortmess + { c = true }
 -- api.nvim_set_option("updatetime", 300)
 
-
 --[[
 opt.backspace = "indent,eol,start"
 opt.ambiwidth = "single"
@@ -226,7 +225,6 @@ opt.swapfile = false
 opt.formatoptions:remove('t')
 opt.formatoptions:append('mM')
 ]]
-
 
 -- opt.autowrite = true -- Enable auto write
 -- opt.completeopt = "menu,menuone,noselect"
@@ -262,3 +260,4 @@ opt.formatoptions:append('mM')
 -- opt.wildmode = "longest:full,full" -- Command-line completion mode
 -- opt.winminwidth = 5 -- Minimum window width
 -- opt.wrap = false -- Disable line wrap
+

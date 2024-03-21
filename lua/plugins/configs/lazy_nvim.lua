@@ -1,5 +1,5 @@
-return {
-  defaults = { lazy = true },
+local lazy_opts = {
+  defaults = { lazy = true }, -- should plugins be lazy-loaded?
   install = { colorscheme = { "nvchad" } },
 
   ui = {
@@ -45,3 +45,5 @@ return {
     },
   },
 }
+
+return lazy_opts

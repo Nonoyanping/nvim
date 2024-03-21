@@ -230,24 +230,24 @@ Treesitter.query_linter = {
 -- crazy-node-movement
 -- nvim-ts-autotag
 
-Treesitter.rainbow = {
-  rainbow = {
-    enable = true,
-    extended_mode = false,
-    colors = {
-      -- "#68a0b0",
-      -- "#946EaD",
-      -- "#c7aA6D",
-      "Gold",
-      "Orchid",
-      "DodgerBlue",
-      -- "Cornsilk",
-      -- "Salmon",
-      -- "LawnGreen",
-    },
-    disable = { "html" },
-  },
-}
+-- Treesitter.rainbow = {
+--   rainbow = {
+--     enable = true,
+--     extended_mode = false,
+--     colors = {
+--       -- "#68a0b0",
+--       -- "#946EaD",
+--       -- "#c7aA6D",
+--       "Gold",
+--       "Orchid",
+--       "DodgerBlue",
+--       -- "Cornsilk",
+--       -- "Salmon",
+--       -- "LawnGreen",
+--     },
+--     disable = { "html" },
+--   },
+-- }
 
   -- matchup = {
   --   enable = true, -- mandatory, false will disable the whole extension

@@ -60,10 +60,9 @@ local servers = {
 	-- "jsonls",
 	-- "yamlls",
 
-  -- Setup Rust_analyzer with rustaceanvim or rust_tools
+  -- rust_analyzer will be handled by rustaceanvim
   "rust_analyzer",
 }
-
 
 local formatter = {
   -- [[ Formatter]]
@@ -79,13 +78,6 @@ for _, lsp in ipairs(servers) do
       settings = require("plugins.configs.server_config")[lsp]
     }
 end
-
--- require("lspconfig").powershell_es.setup {
---   cmd = { 'pwsh', '-NoLogo', '-NoProfile', '-Command', "~/AppData/Local/nvim-data/mason/packages/powershell-editor-services/PowerShellEditorServices/Start-EditorServices.ps1"},
---   single_file_support = true,
---   on_attach = M.on_attach,
---   capabilities = M.capabilities,
--- }
 
 return M
 
